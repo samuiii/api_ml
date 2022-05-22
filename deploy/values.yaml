@@ -1,0 +1,13 @@
+replicaCount: 1
+
+application:
+  name: cassava-api
+  port: 5000
+
+hostname:
+  host: develop-api.samui.ml
+
+image:
+  repository: harbor.das.mcloud.co.th/library/apiflask-backend
+  tag: develop
+
