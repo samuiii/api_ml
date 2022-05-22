@@ -17,3 +17,4 @@ jobs:
         echo ${{ secrets.DOCKER_PASS }} | docker login -u ${{ secrets.DOCKER_ID }} ${{ secrets.DOCKER_HOST }} --password-stdin
         docker build --pull --no-cache -t ${{ secrets.DOCKER_IMAGE }} .
         docker push ${{ secrets.DOCKER_IMAGE }}
+
