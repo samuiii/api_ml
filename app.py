@@ -4,9 +4,13 @@ import numpy as np
 from werkzeug.utils import secure_filename
 from apiflask.fields import File
 from apiflask import APIFlask, Schema
+from flask_cors import CORS
 
 app = APIFlask(__name__)
+CORS(app)
 
+uploads_dir = os.path.join(app.instance_path, 'uploads')
+os.makedirs(uploads_dir, exists_ok=True)
 
 @app.get('/')
 def say_hello():
@@ -24,12 +28,12 @@ def upload_image(data):
     f = data['image']
 
     filename = secure_filename(f.filename)
-    f.save(os.path.join('./static', filename))
+    f.save(os.path.join(uploads_dir, filename))
     class_names = ['cbb', 'cbsd', 'cgm', 'cmd', 'healthy']
     model_test = tf.keras.models.load_model('./my_model.h5')
 
     img = tf.keras.utils.load_img(
-        f'./static/{filename}', target_size=(256, 256)
+        f'{uploads_dir}/{filename}', target_size=(256, 256)
     )
     img_array = tf.keras.utils.img_to_array(img)
     img_array = tf.expand_dims(img_array, 0)  # Create a batch
@@ -37,8 +41,8 @@ def upload_image(data):
     predictions = model_test.predict(img_array)
     score = tf.nn.softmax(predictions[0])
 
-    if os.path.exists('/'.join(['./static', filename])):
-        os.remove('/'.join(['./static', filename]))
+    if os.path.exists('/'.join([uploads_dir, filename])):
+        os.remove('/'.join([uploads_dir, filename]))
 
     return {'message': "This image most likely belongs to {} with a {:.2f} percent confidence."
         .format(class_names[np.argmax(score)], 100 * np.max(score))}, 200
