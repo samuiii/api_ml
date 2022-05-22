@@ -4,6 +4,8 @@ FROM python:3.9-buster
 
 WORKDIR /usr/src/app
 
+ENV FLASK_ENV=development
+
 COPY requirements.txt requirements.txt
 RUN pip3 install -r requirements.txt
 

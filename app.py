@@ -9,8 +9,7 @@ from flask_cors import CORS
 app = APIFlask(__name__)
 CORS(app)
 
-uploads_dir = os.path.join(app.instance_path, 'uploads')
-os.makedirs(uploads_dir, exists_ok=True)
+uploads_dir = '/usr/src/app/static'
 
 @app.get('/')
 def say_hello():
@@ -21,12 +20,11 @@ def say_hello():
 class ImageSchema(Schema):
     image = File(validate=lambda f: f.mimetype in ['image/jpeg', 'image/png'])
 
-
 @app.post('/predict')
 @app.input(ImageSchema, location='files')
 def upload_image(data):
     f = data['image']
-
+    print(f.filename)
     filename = secure_filename(f.filename)
     f.save(os.path.join(uploads_dir, filename))
     class_names = ['cbb', 'cbsd', 'cgm', 'cmd', 'healthy']
