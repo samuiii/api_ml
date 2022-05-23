@@ -4,6 +4,7 @@ FROM python:3.9-buster
 
 WORKDIR /usr/src/app
 
+ENV FLASK_APP=app.py
 ENV FLASK_ENV=development
 
 COPY requirements.txt requirements.txt

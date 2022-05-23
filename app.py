@@ -34,7 +34,8 @@ def upload_image(data):
     filename = secure_filename(f.filename)
     f.save(os.path.join(UPLOAD_FOLDER, filename))
     class_names = ['cbb', 'cbsd', 'cgm', 'cmd', 'healthy']
-    model_test = tf.keras.models.load_model('/usr/src/app/my_model.h5')
+
+    model_test = tf.keras.models.load_model(os.path.join(os.getcwd(), 'my_model.h5'))
 
     img = tf.keras.utils.load_img(
         f'{UPLOAD_FOLDER}/{filename}', target_size=(256, 256)
