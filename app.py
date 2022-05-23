@@ -38,7 +38,7 @@ def upload_image(data):
     if(not os.path.exists(os.path.join(os.getcwd(), 'my_model.h5'))):
         return {'errors': 'not found'},404
 
-    model_test = tf.keras.models.load_model(os.path.join(os.getcwd(), 'my_model.h5'))
+    model_test = tf.keras.models.load_model('my_model.h5')
 
     img = tf.keras.utils.load_img(
         f'{UPLOAD_FOLDER}/{filename}', target_size=(256, 256)
