@@ -35,6 +35,9 @@ def upload_image(data):
     f.save(os.path.join(UPLOAD_FOLDER, filename))
     class_names = ['cbb', 'cbsd', 'cgm', 'cmd', 'healthy']
 
+    if(not os.path.exists(os.path.join(os.getcwd(), 'my_model.h5'))):
+        return {'errors': 'not found'},404
+
     model_test = tf.keras.models.load_model(os.path.join(os.getcwd(), 'my_model.h5'))
 
     img = tf.keras.utils.load_img(
