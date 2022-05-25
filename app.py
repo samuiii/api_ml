@@ -29,11 +29,10 @@ class ImageSchema(Schema):
 def upload_image(data):
     f = data['image']
 
-    print(f.filename)
-
     filename = secure_filename(f.filename)
     f.save(os.path.join(UPLOAD_FOLDER, filename))
     class_names = ['cbb', 'cbsd', 'cgm', 'cmd', 'healthy']
+    class_names_full = ['Cassava bacterial blight','Cassava brown streak disease','Cassava green mite',' Cassava mosaic disease','healthy']
 
     if(not os.path.exists(os.path.join(os.getcwd(), 'my_model.h5'))):
         return {'errors': 'not found'},404
@@ -47,13 +46,16 @@ def upload_image(data):
     img_array = tf.expand_dims(img_array, 0)  # Create a batch
 
     predictions = model_test.predict(img_array)
-    score = tf.nn.softmax(predictions[0])
 
     if os.path.exists('/'.join([UPLOAD_FOLDER, filename])):
         os.remove('/'.join([UPLOAD_FOLDER, filename]))
 
-    return {'message': "This image most likely belongs to {} with a {:.2f} percent confidence."
-        .format(class_names[np.argmax(score)], 100 * np.max(score))}, 200
+
+
+    return {'short_name': class_names[np.argmax(predictions[0])],
+            'full_name': class_names_full[np.argmax(predictions[0])],
+            'percent': 100 * np.max(predictions[0])
+            }, 200
 
 
 if __name__ == '__main__':
